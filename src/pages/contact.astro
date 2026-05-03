@@ -1,0 +1,114 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
+
+export const prerender = true;
+
+const CONTACT_EMAIL = "your-email@example.com";
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <BaseHead
+      title={`お問い合わせ | ${SITE_TITLE}`}
+      description="コノハナページへのお問い合わせ。"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <article class="contact">
+        <header class="page-header">
+          <p class="page-label">Contact</p>
+          <h1>お問い合わせ</h1>
+        </header>
+
+        <p class="lead">
+          作品についてのご感想、掲載依頼、その他ご連絡は下記よりお気軽にどうぞ。
+        </p>
+
+        <div class="contact-box">
+          <p class="contact-label">メールアドレス</p>
+          <a href={`mailto:${CONTACT_EMAIL}`} class="contact-email"
+            >{CONTACT_EMAIL}</a
+          >
+          <p class="contact-note">
+            ※ メールアドレスは実際のものに変更してください。<br>
+            返信までお時間をいただく場合があります。
+          </p>
+        </div>
+
+        <div class="caution">
+          <p>次のご連絡はお受けできません。</p>
+          <ul>
+            <li>営業・宣伝目的のご連絡</li>
+            <li>作品の無断転載・二次使用のご依頼</li>
+          </ul>
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+.page-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgb(var(--gray-light));
+  padding-bottom: 1.5rem;
+}
+.page-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: rgb(var(--gray));
+  margin: 0 0 0.5rem 0;
+}
+.page-header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+.lead {
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+.contact-box {
+  background: rgb(var(--gray-light), 0.3);
+  border: 1px solid rgb(var(--gray-light));
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.contact-label {
+  font-size: 0.8rem;
+  color: rgb(var(--gray));
+  margin: 0 0 0.25rem 0;
+  letter-spacing: 0.05em;
+}
+.contact-email {
+  font-size: 1.1rem;
+  color: var(--accent);
+  word-break: break-all;
+}
+.contact-note {
+  font-size: 0.8rem;
+  color: rgb(var(--gray));
+  margin: 0.75rem 0 0 0;
+  line-height: 1.7;
+}
+.caution {
+  font-size: 0.9rem;
+  color: rgb(var(--gray-dark));
+}
+.caution ul {
+  padding-left: 1.25rem;
+  line-height: 2;
+}
+</style>

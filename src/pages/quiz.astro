@@ -1,0 +1,320 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
+
+export const prerender = true;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <BaseHead
+      title={`小説診断 | ${SITE_TITLE}`}
+      description="質問に答えて、あなたにぴったりの作品を見つけよう。"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <article class="quiz-page">
+        <header class="page-header">
+          <p class="page-label">Novel Quiz</p>
+          <h1>小説診断</h1>
+          <p class="page-desc">
+            3つの質問に答えて、あなたにぴったりの作品を見つけましょう。
+          </p>
+        </header>
+
+        <div id="quiz" class="quiz">
+          <div class="step" id="step-0">
+            <p class="question">Q1. 今の気分は？</p>
+            <div class="choices">
+              <button
+                type="button"
+                class="choice"
+                data-step="0"
+                data-value="warm"
+              >
+                あたたかい気持ちになりたい
+              </button>
+              <button
+                type="button"
+                class="choice"
+                data-step="0"
+                data-value="thrilling"
+              >
+                ドキドキしたい
+              </button>
+              <button
+                type="button"
+                class="choice"
+                data-step="0"
+                data-value="quiet"
+              >
+                静かに物語に浸りたい
+              </button>
+            </div>
+          </div>
+
+          <div class="step hidden" id="step-1">
+            <p class="question">Q2. 好きな舞台は？</p>
+            <div class="choices">
+              <button
+                type="button"
+                class="choice"
+                data-step="1"
+                data-value="everyday"
+              >
+                日常・現代
+              </button>
+              <button
+                type="button"
+                class="choice"
+                data-step="1"
+                data-value="fantasy"
+              >
+                ファンタジー・異世界
+              </button>
+              <button
+                type="button"
+                class="choice"
+                data-step="1"
+                data-value="any"
+              >
+                どちらでもいい
+              </button>
+            </div>
+          </div>
+
+          <div class="step hidden" id="step-2">
+            <p class="question">Q3. 読み終わったあとに残したい気持ちは？</p>
+            <div class="choices">
+              <button
+                type="button"
+                class="choice"
+                data-step="2"
+                data-value="hopeful"
+              >
+                希望・前向き
+              </button>
+              <button
+                type="button"
+                class="choice"
+                data-step="2"
+                data-value="bittersweet"
+              >
+                切なさ・余韻
+              </button>
+              <button
+                type="button"
+                class="choice"
+                data-step="2"
+                data-value="surprise"
+              >
+                驚き・謎
+              </button>
+            </div>
+          </div>
+
+          <div class="result hidden" id="result">
+            <div class="result-inner">
+              <p class="result-label">あなたへのおすすめ</p>
+              <h2 id="result-title" class="result-title"></h2>
+              <p id="result-desc" class="result-desc"></p>
+              <button type="button" class="retry-btn" id="retry">
+                もう一度診断する
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script>
+const answers: string[] = [];
+
+const results: Record<string, { title: string; desc: string }> = {
+  "warm-everyday-hopeful": {
+    title: "日だまりの物語",
+    desc: "日常の中の小さな幸せを描いた作品です。読み終わったあと、ほっと温かい気持ちになれます。",
+  },
+  "warm-everyday-bittersweet": {
+    title: "さよならの向こう側",
+    desc: "大切な人との別れと再生を描いた作品。切なくも、心に残る余韻があります。",
+  },
+  "thrilling-fantasy-surprise": {
+    title: "夜の迷宮と鍵師",
+    desc: "謎が謎を呼ぶファンタジーミステリ。最後のページまで目が離せません。",
+  },
+  "quiet-any-bittersweet": {
+    title: "雨の図書館",
+    desc: "静かな図書館を舞台に、本と人との縁を描いた物語。じっくり浸れる一作です。",
+  },
+  default: {
+    title: "おすすめ作品",
+    desc: "気になる作品はお知らせページでご確認ください。あなたに合う物語がきっと見つかります。",
+  },
+};
+
+function getResult(ans: string[]): { title: string; desc: string } {
+  const key = ans.join("-");
+  return results[key] ?? results.default;
+}
+
+document.querySelectorAll<HTMLButtonElement>(".choice").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const step = Number(btn.dataset.step);
+    const value = btn.dataset.value ?? "";
+    answers[step] = value;
+
+    const currentStep = document.getElementById(`step-${step}`);
+    currentStep?.classList.add("hidden");
+
+    const nextStep = document.getElementById(`step-${step + 1}`);
+    if (nextStep) {
+      nextStep.classList.remove("hidden");
+    } else {
+      const { title, desc } = getResult(answers);
+      const resultEl = document.getElementById("result");
+      const titleEl = document.getElementById("result-title");
+      const descEl = document.getElementById("result-desc");
+      if (titleEl) titleEl.textContent = title;
+      if (descEl) descEl.textContent = desc;
+      resultEl?.classList.remove("hidden");
+    }
+  });
+});
+
+document.getElementById("retry")?.addEventListener("click", () => {
+  answers.length = 0;
+  document.querySelectorAll(".step").forEach((el, i) => {
+    el.classList.toggle("hidden", i !== 0);
+  });
+  document.getElementById("result")?.classList.add("hidden");
+});
+</script>
+
+<style>
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+.page-header {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid rgb(var(--gray-light));
+  padding-bottom: 1.5rem;
+}
+.page-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: rgb(var(--gray));
+  margin: 0 0 0.5rem 0;
+}
+.page-header h1 {
+  font-size: 1.6rem;
+  margin: 0 0 0.5rem 0;
+}
+.page-desc {
+  margin: 0;
+  color: rgb(var(--gray-dark));
+  font-size: 0.95rem;
+}
+.quiz {
+  min-height: 220px;
+}
+.step {
+  animation: fadeIn 0.25s ease;
+}
+.question {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 1.25rem 0;
+  color: rgb(var(--black));
+}
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.choice {
+  display: block;
+  width: 100%;
+  padding: 0.9rem 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgb(var(--gray-light));
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  color: rgb(var(--gray-dark));
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+  font-family: inherit;
+}
+.choice:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.result-inner {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgb(var(--gray-light));
+  border-radius: 12px;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+.result-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: rgb(var(--gray));
+  margin: 0 0 0.5rem 0;
+}
+.result-title {
+  font-size: 1.4rem;
+  margin: 0 0 0.75rem 0;
+  color: rgb(var(--black));
+}
+.result-desc {
+  color: rgb(var(--gray-dark));
+  line-height: 1.8;
+  margin: 0 0 1.5rem 0;
+}
+.retry-btn {
+  padding: 0.55rem 1.25rem;
+  background: transparent;
+  border: 1px solid rgb(var(--gray-light));
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: rgb(var(--gray-dark));
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.retry-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hidden {
+  display: none;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

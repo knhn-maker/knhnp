@@ -26,12 +26,19 @@ const posts = (await getCollection("blog"))
     <Header />
     <main>
       <section class="intro">
+        <p class="site-label">— 小説の庭へようこそ —</p>
         <h1 class="site-name">{SITE_TITLE}</h1>
-        <p class="bio">{SITE_DESCRIPTION}</p>
+        <p class="bio">
+          自作の小説を届けるための場所です。物語との出会いを、どうぞ。
+        </p>
+        <div class="intro-links">
+          <a href="/quiz" class="btn-primary">読む作品を探す</a>
+          <a href="/about" class="btn-secondary">作者について</a>
+        </div>
       </section>
 
       <section class="recent-posts">
-        <p class="section-label">最近の投稿</p>
+        <p class="section-label">最新のお知らせ</p>
         <ul class="post-list">
           {posts.map((post) => (
 						<li class="post-item">
@@ -58,6 +65,12 @@ main {
   flex-direction: column;
   gap: 4rem;
 }
+.site-label {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: rgb(var(--gray));
+}
 .site-name {
   font-size: 1.75rem;
   margin: 0 0 0.75rem 0;
@@ -65,10 +78,42 @@ main {
   line-height: 1.2;
 }
 .bio {
-  margin: 0;
+  margin: 0 0 1.5rem 0;
   color: rgb(var(--gray-dark));
   line-height: 1.7;
   font-size: 1rem;
+}
+.intro-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
+.btn-secondary {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgb(var(--gray-light));
+  color: rgb(var(--gray-dark));
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.15s;
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .section-label {
   font-size: 0.75rem;
