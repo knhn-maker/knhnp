@@ -1,0 +1,97 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
+
+export const prerender = true;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <BaseHead
+      title={`作者紹介 | ${SITE_TITLE}`}
+      description="コノハナページの作者について。"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <article class="about">
+        <header class="page-header">
+          <p class="page-label">About</p>
+          <h1>作者紹介</h1>
+        </header>
+
+        <section class="profile">
+          <div class="profile-body">
+            <h2 class="pen-name">ペンネーム</h2>
+            <p>
+              ここに自己紹介文を書いてください。どんな作品を書いているか、好きなこと、影響を受けた作家など、読者に伝えたいことを自由に。
+            </p>
+            <p>
+              物語を書くことが好きで、日常の中にある小さな不思議や、人の心の機微を描くことが多いです。
+            </p>
+          </div>
+        </section>
+
+        <section class="works">
+          <h2>書いている作品の傾向</h2>
+          <ul class="genre-list">
+            <li>現代ファンタジー</li>
+            <li>日常ミステリ</li>
+            <li>青春・恋愛</li>
+          </ul>
+          <p class="note">※ ジャンルや傾向は自由に書き換えてください。</p>
+        </section>
+
+        <section class="activity">
+          <h2>活動場所</h2>
+          <p>活動しているサイトやSNSのリンクをここに追加できます。</p>
+        </section>
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+.page-header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgb(var(--gray-light));
+  padding-bottom: 1.5rem;
+}
+.page-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: rgb(var(--gray));
+  margin: 0 0 0.5rem 0;
+}
+.page-header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+.about section {
+  margin-bottom: 2.5rem;
+}
+.pen-name {
+  font-size: 1rem;
+  color: rgb(var(--gray));
+  margin-bottom: 0.5rem;
+}
+.genre-list {
+  padding-left: 1.25rem;
+  line-height: 2;
+}
+.note {
+  font-size: 0.8rem;
+  color: rgb(var(--gray));
+  margin-top: 0.5rem;
+}
+</style>
